@@ -9,6 +9,8 @@ import subprocess
 import platform
 import re
 import sys
+import os
+import ctypes
 
 
 class WiFiPasswordRecovery:
@@ -104,7 +106,6 @@ class WiFiPasswordRecovery:
             print("nmcli not found. Trying alternative method...")
             # Alternative: Read from NetworkManager configuration files
             try:
-                import os
                 nm_path = "/etc/NetworkManager/system-connections/"
                 if os.path.exists(nm_path):
                     for filename in os.listdir(nm_path):
@@ -225,7 +226,6 @@ def main():
     # Check if running with appropriate privileges
     if platform.system() == "Windows":
         try:
-            import ctypes
             is_admin = ctypes.windll.shell32.IsUserAnAdmin()
             if not is_admin:
                 print("Warning: Not running as administrator. Some passwords may not be accessible.")
@@ -233,7 +233,6 @@ def main():
         except:
             pass
     elif platform.system() in ["Linux", "Darwin"]:
-        import os
         if os.geteuid() != 0:
             print("Warning: Not running as root. Some passwords may not be accessible.")
             print("Consider running with sudo for full access.\n")
